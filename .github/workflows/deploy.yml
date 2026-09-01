@@ -1,4 +1,4 @@
-name: Hello World Workflow
+name: My First Workflow
 'on': push
 jobs:
   my-test-job:
