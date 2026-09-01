@@ -1,7 +1,9 @@
 name: Process OpenAPI
 'on':
   push:
-    branches: [main]
+    branches: 
+     - main
+     - 'feature/*'      # Matches feature/test, but NOT feature/test/ui
 jobs:
   process-openapi:
     runs-on: ubuntu-latest
