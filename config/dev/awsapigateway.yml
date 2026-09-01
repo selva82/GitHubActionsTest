@@ -1,1 +1,17 @@
-aws-api-gateway:
+aws:
+  api-gateway:
+    rest:
+      stages:
+        - name: dev
+          description: Development stage
+          v0:
+            product-name: rsenablers
+            base-path: testapi
+            authentication: oauth
+            backend-authentication: basicauth
+            integration-type: vpc-link
+            usage-plan: test-usage-plan
+            #optional fields
+            #stage-variables:
+            #cache: false
+            #cors: false

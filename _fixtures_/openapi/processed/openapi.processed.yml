@@ -1,1 +1,71 @@
-
+openapi: 3.0.0
+info:
+  title: User Management API
+  description: A minimal API example to demonstrate OpenAPI Specification structure.
+  version: 1.0.0
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: http://localhost:8080/v1
+    description: Local development server
+paths:
+  /users:
+    get:
+      summary: Retrieve a list of users
+      description: Returns an array of all active users in the system.
+      responses:
+        '200':
+          description: A successful response returning user data.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: GET
+        connectionType: VPC_LINK
+        connectionId: ${stageVariables.vpcLinkId}
+        uri: ${stageVariables.backendUrl}/users
+    post:
+      summary: Create a new user
+      description: Adds a new user profile to the database.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      x-amazon-apigateway-integration:
+        type: http_proxy
+        httpMethod: POST
+        connectionType: VPC_LINK
+        connectionId: ${stageVariables.vpcLinkId}
+        uri: ${stageVariables.backendUrl}/users
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 101
+        name:
+          type: string
+          example: Jane Doe
+        email:
+          type: string
+          format: email
+          example: jane.doe@example.com

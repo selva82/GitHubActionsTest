@@ -1,12 +1,40 @@
-name: My Test Workflow
-'on': 
+name: Transform OpenAPI Specification
+'on':
   push:
-   branches:
-     - feature-test
-     #- 'feature/*'
+    branches:
+      - main
+      - 'feature*'
+  pull_request:
+    branches:
+      - main
 jobs:
-  my-test-job:
+  transform-openapi:
+    name: Build and transform OpenAPI
     runs-on: ubuntu-latest
     steps:
-      - name: Run Test Workflow
-        run: 'echo "First test workflow executed successfully!"'
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run transformer tests
+        run: npm test
+
+      - name: Generate processed OpenAPI specification
+        run: npm run transform
+
+      - name: Verify processed specification
+        run: test -s _fixtures_/openapi/processed/openapi.processed.yml
+
+      - name: Upload processed specification
+        uses: actions/upload-artifact@v4
+        with:
+          name: openapi-processed
+          path: _fixtures_/openapi/processed/openapi.processed.yml
