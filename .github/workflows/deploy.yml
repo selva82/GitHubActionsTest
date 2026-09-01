@@ -1,8 +1,22 @@
-name: My First Workflow
-'on': push
+name: Process OpenAPI
+'on':
+  push:
+    branches: [main]
 jobs:
-  my-test-job:
+  process-openapi:
     runs-on: ubuntu-latest
     steps:
-      - name: Run Hello World
-        run: 'echo "Hello, World!"'
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm install
+      - run: npm test
+      - run: npm run build
+      - name: Generate processed OpenAPI
+        run: npm run process -- openapi.yml openapi.processed.yml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: processed-openapi
+          path: openapi.processed.yml
