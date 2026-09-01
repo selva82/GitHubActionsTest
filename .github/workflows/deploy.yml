@@ -2,11 +2,11 @@ name: My Test Workflow
 'on': 
   push:
    branches:
-     - main
-     - 'feature/*'
+     - feature-test
+     #- 'feature/*'
 jobs:
   my-test-job:
     runs-on: ubuntu-latest
     steps:
       - name: Run Test Workflow
-        run: 'echo "Hello, World!"'
+        run: 'echo "First test workflow executed successfully!"'
