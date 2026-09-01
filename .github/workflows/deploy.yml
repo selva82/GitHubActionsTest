@@ -1,8 +1,12 @@
-name: My First Workflow
-'on': push
+name: My Test Workflow
+'on': 
+  push:
+   branches:
+     - main
+     - 'feature/*'
 jobs:
   my-test-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Run Hello World
+      - name: Run Test Workflow
         run: 'echo "Hello, World!"'
